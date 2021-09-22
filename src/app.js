@@ -1,23 +1,16 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import './App.css';
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import './app.css';
+import { ReactTile } from './react-tile/react-tile';
 
 class App extends React.Component {
-
     render() {
-        return (<h1 className="wrapper">React MFE</h1>);
+        return (<ReactTile/>);
     }
 }
 
-// ReactDOM.render(
-//     <App/>,
-//     document.getElementById('root')
-// );
-
-class ReactMfeElement extends HTMLElement {
-    connectedCallback() {
-        ReactDOM.render(<App/>, this);
-    }
-}
-
-customElements.define('react-mfe-element', ReactMfeElement);
+ReactDOM.render(
+    <App/>,
+    document.getElementById('root')
+);

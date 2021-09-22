@@ -53,7 +53,7 @@ module.exports = options => {
                 library: { type: "var", name: "reactMfeSandbox" },
                 filename: "remoteEntry.js",
                 exposes: {
-                    './reactMfeElement': './src/app.js',
+                    './reactMfeElement': './src/react-tile/react-tile.js',
                 },
                 shared: ["react", "react-dom"]
             })
