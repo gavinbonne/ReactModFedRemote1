@@ -10,9 +10,14 @@ export class ReactTile extends React.Component {
 }
 
 class ReactTileWebComponent extends HTMLElement {
+
+    constructor() {
+        super();
+    }
+
     connectedCallback() {
-        ReactDOM.render(<ReactTile/>, this);
+        ReactDOM.render(<ReactTile />, this);
     }
 }
 
-customElements.define('react-mfe-element', ReactTileWebComponent);
+customElements.define('react-mfe-tile', ReactTileWebComponent);

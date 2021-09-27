@@ -53,13 +53,16 @@ module.exports = options => {
                 library: { type: "var", name: "reactMfeSandbox" },
                 filename: "remoteEntry.js",
                 exposes: {
-                    './reactMfeElement': './src/react-tile/react-tile.js',
+                    './reactMfeInputOutput': './src/react-input-output/react-input-output.js',
+                    './reactMfeTile': './src/react-tile/react-tile.js',
+                    './reactMfeParent': './src/react-parent/react-parent.js',
                 },
-                shared: ["react", "react-dom"]
+                shared: ["react", "react-dom", "react-router-dom"]
             })
         ],
         devServer: {
-            port: 3002
+            port: 3002,
+            historyApiFallback: true
         }
     }
 }
