@@ -11,10 +11,6 @@ export class ReactTile extends React.Component {
 
 class ReactTileWebComponent extends HTMLElement {
 
-    constructor() {
-        super();
-    }
-
     connectedCallback() {
         ReactDOM.render(<ReactTile />, this);
     }

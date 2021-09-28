@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom';
 import { ReactChildOne } from './react-child-one/react-child-one';
 import { ReactChildTwo } from './react-child-two/react-child-two';
-
+import registerWebComponent from '../utils/register-web-component';
 import './react-parent.css';
 
 class ReactParent extends React.Component {
@@ -28,20 +28,9 @@ class ReactParent extends React.Component {
     };
 }
 
-class ReactParentRouter extends React.Component {
-    componentDidUpdate(prevProps) {
-        if (this.props.location !== prevProps.location) {
-            this.onRouteChanged();
-        }
-    }
-
-    onRouteChanged() {
-        console.log("ROUTE CHANGED");
-        this.render();
-    }
-
+const reactParentRouter = class extends React.Component {
     render() {
-        let match = this.props.match;
+        const { match } = this.props;
 
         return (
             <Switch>
@@ -53,31 +42,26 @@ class ReactParentRouter extends React.Component {
         );
     }
 }
-const ReactParentRouterWithRouter = withRouter(ReactParentRouter);
-export default ReactParentRouterWithRouter;
+const ReactParentRouter = withRouter(reactParentRouter);
+export default ReactParentRouter;
 
-class ReactParentRouterWebComponent extends HTMLElement {
-    connectedCallback() {
-        const mountPoint = document.createElement('span');
-        this.appendChild(mountPoint);
-        // this.attachShadow({ mode: 'open' }).appendChild(mountPoint);
-        const test = this.getAttribute('test');
-
-        ReactDOM.render(
+class ReactParentRouterMount extends React.Component {
+    render() {
+        const { updated_url } = this.props;
+        return (
             <div>
                 <BrowserRouter>
                     <Switch>
                         {/* <Redirect exact from="/" to="/react-parent" /> */}
                         <Route path="/react-parent">
-                            <ReactParentRouterWithRouter test={test} />
+                            <ReactParentRouter />
                         </Route>
                         <Redirect from="*" to='/react-parent' />
                     </Switch>
                 </BrowserRouter>
-            </div>,
-            mountPoint
+            </div>
         );
     }
 }
 
-customElements.define('react-mfe-parent', ReactParentRouterWebComponent);
+registerWebComponent(ReactParentRouterMount, 'react-mfe-parent');
