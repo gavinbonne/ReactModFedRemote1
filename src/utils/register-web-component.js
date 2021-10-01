@@ -24,7 +24,10 @@ export default function registerWebComponent(ComponentRef, name) {
         }
 
         mount() {
-            const props = { ...this.getProps(this.attributes, ComponentRef.propTypes) };
+            const props = {
+                ...this.getProps(this.attributes),
+                ...this.getEvents()
+            };
             ReactDOM.render(<ComponentRef {...props} />, this);
         }
 
@@ -32,29 +35,36 @@ export default function registerWebComponent(ComponentRef, name) {
             ReactDOM.unmountComponentAtNode(this);
         }
 
-        getProps(attributes, propTypes) {
-            propTypes = propTypes || {};
-
+        getProps(attributes) {
             return [...attributes]
                 .filter(attr => attr.name !== 'style')
-                .map(attr => this.convert(propTypes, attr.name, attr.value))
+                .map(attr => this.convert(attr.name, attr.value))
                 .reduce((props, prop) => ({ ...props, [prop.name]: prop.value }), {})
         }
 
-        convert(propTypes, attrName, attrValue) {
-            // Attributes MUST be lowercase. I suggest snake_case for multi-word attributes
-            const propName = Object.keys(propTypes).find(key => key.toLowerCase() == attrName);
+        getEvents() {
+            return Object.values(this.attributes)
+                .filter(key => /when([a-z]*_*)*/.exec(key.name))
+                .reduce((events, ev) => ({
+                    ...events,
+                    [ev.name]: args => this.dispatchEvent(new CustomEvent(ev.name, { ...args }))
+                }), {});
+        }
 
+        convert(attrName, attrValue) {
             let value = attrValue;
             if (attrValue === 'true' || attrValue === 'false') {
-                value = attrValue == 'true';
+                value = attrValue === 'true';
             } else if (!isNaN(attrValue) && attrValue !== '') {
                 value = +attrValue;
             } else if (/^{.*}/.exec(attrValue)) {
                 value = JSON.parse(attrValue);
             }
 
-            return { name: propName ? propName : attrName, value: value };
+            return {
+                name: attrName,
+                value: value
+            };
         }
     }
 

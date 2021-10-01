@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route, Link, Redirect } from 'react-router-dom';
 
 import './app.css';
-import { ReactInputOutput } from './react-input-output/react-input-output';
+import ReactInputOutput from './react-input-output/react-input-output';
 import ReactParentRouter from './react-parent/react-parent';
 import { ReactTile } from './react-tile/react-tile';
 
